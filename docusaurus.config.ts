@@ -107,7 +107,7 @@ const config: Config = {
   ],
 
   // Load client modules (run in browser)
-  clientModules: [],
+  clientModules: ['./src/clientModules/gaHiddenBodyInjection.ts'],
 
   themeConfig: {
     // Replace with your project's social card
