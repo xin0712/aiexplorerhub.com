@@ -13,3 +13,20 @@ docusaurus:
   permalink: /docusaurus
   description: Docusaurus tag description
 
+AI:
+  label: AI
+  permalink: /AI
+  description: 人工智能相关内容
+GPT:
+  label: GPT
+  permalink: /GPT
+  description: GPT 系列模型、Agent 等议题
+职场:
+  label: 职场
+  permalink: /career
+  description: 工作与职业发展、职场技能
+沟通:
+  label: 沟通
+  permalink: /communication
+  description: 沟通表达、知识传递、交流能力
+

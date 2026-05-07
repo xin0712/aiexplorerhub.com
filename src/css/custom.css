@@ -6,27 +6,27 @@
 
 /* You can override the default Infima variables here. */
 :root {
-  --ifm-color-primary: #2e8555;
-  --ifm-color-primary-dark: #29784c;
-  --ifm-color-primary-darker: #277148;
-  --ifm-color-primary-darkest: #205d3b;
-  --ifm-color-primary-light: #33925d;
-  --ifm-color-primary-lighter: #359962;
-  --ifm-color-primary-lightest: #3cad6e;
+  --ifm-color-primary: #8b7ff0;
+  --ifm-color-primary-dark: #674ee3;
+  --ifm-color-primary-darker: #543aaf;
+  --ifm-color-primary-darkest: #372584;
+  --ifm-color-primary-light: #bcb3fa;
+  --ifm-color-primary-lighter: #e1ddfa;
+  --ifm-color-primary-lightest: #f4f3fd;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
 }
 
-/* Practice timeline summary color: light yellow */
+/* Practice timeline summary color: blue */
 .practice-timeline details {
-  background: var(--ifm-color-warning-contrast-background);
-  border: 1px solid var(--ifm-color-warning);
+  background: var(--ifm-color-info-contrast-background);
+  border: 1px solid var(--ifm-color-info);
   border-left-width: 4px; /* 保留左侧强调线 */
   border-radius: 6px;
 }
 
 .practice-timeline details > summary {
-  background: var(--ifm-color-warning-contrast-background);
+  background: var(--ifm-color-info-contrast-background);
   padding: 8px 12px;
   border-radius: 6px;
   border-bottom: none !important; /* 移除主题默认的蓝色分割线 */
@@ -47,7 +47,7 @@
   margin-right: 8px;
   border-style: solid;
   border-width: 6px 0 6px 8px; /* ▶ */
-  border-color: transparent transparent transparent var(--ifm-color-warning);
+  border-color: transparent transparent transparent var(--ifm-color-info);
   transform: rotate(0deg);
   transition: transform .2s ease;
   align-self: center;
@@ -73,7 +73,7 @@
 
 /* 在内容区加上浅黄色上边框（仅设置在最外层 wrapper 上） */
 .practice-timeline details[open] > summary + * {
-  border-top: 1px solid var(--ifm-color-warning) !important;
+  border-top: 1px solid var(--ifm-color-info) !important;
 }
 /* 防止内部容器再次绘制顶边线导致双线 */
 .practice-timeline details[open] > summary + * [class*="collapsibleContent"],
@@ -85,12 +85,12 @@
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
 [data-theme='dark'] {
-  --ifm-color-primary: #25c2a0;
-  --ifm-color-primary-dark: #21af90;
-  --ifm-color-primary-darker: #1fa588;
-  --ifm-color-primary-darkest: #1a8870;
-  --ifm-color-primary-light: #29d5b0;
-  --ifm-color-primary-lighter: #32d8b4;
-  --ifm-color-primary-lightest: #4fddbf;
+  --ifm-color-primary: #8b7ff0;
+  --ifm-color-primary-dark: #674ee3;
+  --ifm-color-primary-darker: #543aaf;
+  --ifm-color-primary-darkest: #372584;
+  --ifm-color-primary-light: #bcb3fa;
+  --ifm-color-primary-lighter: #e1ddfa;
+  --ifm-color-primary-lightest: #32285a;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }

@@ -1,0 +1,207 @@
+---
+title: 把 GitHub 链接扔给 Cursor 后，我 1小时部署完了Hermes
+date: 2026-05-06
+slug: cursor-github-hermes-wechat-1hour
+authors: [default]
+tags: [AI, GPT]
+---
+
+# 我把 GitHub 链接甩给 Cursor，1 小时后微信 Agent 真跑起来了（真实协作实录）
+
+> 这不是一篇“我自己敲命令”的传统教程。  
+> 这是一次真实的人与agent的协作：我给目标，Cursor 负责执行与排障，我在关键节点做决策，最后把 Hermes 跑进微信和服务器。
+
+<!-- truncate -->
+
+---
+
+## 先说结论：为什么我要写这篇
+
+以前写部署教程，默认逻辑是：  
+"你先学会一堆命令，再按步骤敲。"
+
+但我这次的真实路径不是这样。
+
+我做的事情非常简单：
+
+1. 把 GitHub 链接发给 Cursor
+2. 说清楚目标：我要部署 Hermes，并接入微信
+3. 遇到选项和报错就截图给它
+4. 它给我下一步动作，我执行
+5. 直到本地跑通、微信跑通、服务器 24 小时跑通
+
+所以我想记录的不是“命令列表”，而是一种新的工作方式：  
+**从“自己执行教程”升级为“和 AI 协作完成任务”。**
+
+---
+
+## 这篇文章适合谁
+
+- 想把 Agent 快速落地到微信，但不想先啃完整技术栈的人
+- 想知道“和 Cursor 协作”到底该怎么配合的人
+- 对“AI 时代教程应该怎么写”感兴趣的人
+
+---
+
+## 我的真实协作流程（可复用）
+
+我这次用的是一个很稳定的协作循环：
+
+**目标 -> 执行 -> 截图 -> 决策 -> 继续执行**
+
+具体是这样：
+
+- 我负责：给目标、做业务决策、确认选项
+- Cursor 负责：查文档、给具体命令、解释报错、收敛路径
+
+你可以把它理解为：  
+我不是在“自己部署”，而是在“带着一个 24 小时在线的技术同事一起部署”。
+
+---
+
+## 真实时间线
+
+### 1) 起点：只有一个 GitHub 链接
+
+我开场只做了一件事：把 Hermes 仓库链接丢给 Cursor，说“帮我部署，并告诉我可接入哪些模型和渠道”。
+
+<img src="/img/blog/cursor-hermes-wechat/01-start-request.png" alt="截图 01：最初对话输入（GitHub 链接 + 目标）" />
+
+---
+
+### 2) 本地部署：先跑通，再追求完美
+
+Cursor 先带我完成本地安装、模型配置和 TUI 启动。  
+期间遇到 npm 依赖和环境差异，我直接截图给它，它直接修复。
+
+<img src="/img/blog/cursor-hermes-wechat/02-hermes-installed.png" alt="截图 02：Hermes 安装完成终端输出" />  
+<img src="/img/blog/cursor-hermes-wechat/03-model-configured.png" alt="截图 03：hermes model 配置成功（provider/model）" />  
+<img src="/img/blog/cursor-hermes-wechat/04-tui-ready.png" alt="截图 04：TUI ready 界面（gpt 模型已生效）" />
+
+---
+
+### 3) 微信接入：我只做选择题，Cursor做判断题
+
+进入 `hermes gateway setup` 后，关键价值出来了：
+
+- 我不需要记每个配置项含义
+- 我只要截图当前页面，问“选哪个？”
+- Cursor 根据目标（个人微信优先）给出具体选择并解释后果
+
+比如这几类决策：
+
+- 选 `Weixin / WeChat` 还是 `WeCom`
+- 私聊开放还是配对审批
+- 群聊是否开启（最终选择禁群，提升稳定性）
+
+<img src="/img/blog/cursor-hermes-wechat/05-platform-select.png" alt="截图 05：平台选择页面（WeCom/Weixin）" />  
+<img src="/img/blog/cursor-hermes-wechat/08-configured.png" alt="截图 08：配置完成页面（configured）" />
+
+---
+
+### 4) 真问题出现场：不是“有没有报错”，而是“怎么继续”
+
+这次最真实的部分，是连续碰到问题：
+
+- SSL 登录失败
+- pip 不可用/PEP 668 提示
+- 环境里没有 pip 模块
+- 网关 warning 与模型 provider 未配置
+
+传统教程会在这里断掉。  
+这次协作里，我做的是“持续贴输出”，Cursor 做的是“持续给下一步”。
+
+最后问题都被逐个消化，而不是变成“我先去研究两天”。
+
+<img src="/img/blog/cursor-hermes-wechat/09-error-log.png" alt="截图 09：典型报错截图（如 SSL EOF / pip not found）" />  
+<img src="/img/blog/cursor-hermes-wechat/10-fixed-log.png" alt="截图 10：warning 日志截图 + 修复后截图" />
+
+---
+
+### 5) 上服务器：从“能用”到“24小时在线”
+
+本地跑通后，我继续让 Cursor 带我上云（Vultr 新加坡）：
+
+- 选机型、选系统、填 Hostname
+- 创建实例、拿 IP
+- Docker 化部署 Hermes
+- 设置 `--restart unless-stopped`
+- 检查容器运行和日志
+
+这一步我最有感受的是：  
+它不仅告诉我“怎么做”，还告诉我“为什么这么做更稳”。
+
+<img src="/img/blog/cursor-hermes-wechat/11-vultr-plan.png" alt="截图 11：Vultr 选型页面" />  
+<img src="/img/blog/cursor-hermes-wechat/12-vultr-running.png" alt="截图 12：实例 Running 状态" />  
+<img src="/img/blog/cursor-hermes-wechat/14-wechat-success.png" alt="截图 14：微信侧实际对话成功截图" />
+
+---
+
+## 我最后的配置选择（真实结果）
+
+为了保证稳定和可复制，我最后定的是：
+
+- 微信路线：`Weixin / WeChat`（个人微信）
+- 私聊：允许全部（先跑通）
+- 群聊：禁用（减少 iLink 限制带来的不确定性）
+- 服务器：海外节点，Docker 常驻运行
+
+这不是“最复杂”的方案，但这是“能稳定上线”的方案。
+
+---
+
+## 我最大的认知变化
+
+以前我把 AI 当“问答工具”。  
+这次之后，我更愿意把它当“协作执行者”：
+
+- 你给方向
+- 它给动作
+- 你做决策
+- 它持续推进
+
+它替代的不是“技术”，而是“你一个人独自排障的时间”。
+
+---
+
+## 给想复现这条路的人 3 条建议
+
+1. **先说目标，不要一上来问命令**  
+   例如：“我要部署Hermes到本地，这是GitHub：https://github.com/nousresearch/hermes-agent”
+
+2. **每到选择页就截图，不要硬猜**  
+   你的截图越清晰，AI 的指导越准确。
+
+3. **把报错原文完整贴出，不要只说‘报错了’**  
+   很多问题只差一行关键日志。
+
+---
+
+## 你可以直接复制的开场提示词
+
+```text
+这是我要部署的开源项目链接：<GitHub URL>
+目标：在微信上跑通一个可用的 Agent，并最终部署到服务器 24 小时在线。
+要求：
+1) 先本地跑通，再上服务器；
+2) 每一步给我可执行的下一条命令；
+3) 遇到选择界面时，我会截图给你，你告诉我怎么选；
+4) 遇到报错时，你给我最短修复路径，不要只讲原理。
+```
+
+---
+
+## 结尾
+
+如果你还在犹豫“现在做 Agent 会不会太复杂”，  
+我的答案是：复杂，但不必你一个人扛。
+
+真正改变效率的，不是多会几个命令，  
+而是你是否开始用“协作思维”来做技术落地。
+
+这次我和 Cursor 的协作，让我第一次清晰感受到：  
+**一个人，也可以把一个完整的 Agent 产品路径跑通。**
+
+如果你看到这里，还是更想按“手把手命令流”来操作，可以看上一篇教程：  
+[《1小时速成：在微信里拥有你的第一个 Agent（个人微信版）》](/blog/first-wechat-agent-in-1-hour)
+

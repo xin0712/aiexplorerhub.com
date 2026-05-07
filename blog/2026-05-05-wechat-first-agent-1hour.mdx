@@ -1,0 +1,229 @@
+---
+title: 1小时速成：在微信里拥有你的第一个 Agent（个人微信版）
+date: 2026-05-05
+slug: first-wechat-agent-in-1-hour
+authors: [default]
+tags: [AI, GPT]
+---
+
+如果你一直想把 AI Agent 真正放进微信里，用聊天的方式随时调用它，这篇就是给你的实战教程。
+
+这篇文章只讲一条能快速跑通的路线：**个人微信（Weixin）接入**。  
+目标非常明确：**1小时内，让你的 Agent 在微信私聊中可用**。
+
+---
+
+## 这篇教程适合谁
+
+- 想在微信里直接和 Agent 聊天的人
+- 不想先折腾服务器、数据库、前端页面的人
+- 希望“先跑通，再优化”的实用派
+
+---
+
+## 最终效果
+
+完成后你将得到：
+
+- 一个本地运行的 Hermes Agent
+- 通过微信私聊可直接对话的机器人
+- 可持续使用的网关进程（`hermes gateway`）
+
+> 说明：本文是“个人微信版”，群聊能力通常受平台限制，**私聊最稳**。
+
+---
+
+## 你要准备什么（5分钟）
+
+- 一台 Mac（Windows 可走 WSL2，本文以 macOS 为例）
+- 已安装 `git`、`node`、`python3`
+- 一个可正常使用的微信账号
+- 稳定网络
+
+---
+
+## 第 0 步：理解这条路线（很重要）
+
+本教程采用 Hermes 的 `Weixin / WeChat` 适配器（iLink Bot 方式），特征是：
+
+- 优点：上手快、无需自建后端服务
+- 现实限制：主要面向私聊，群聊能力不保证
+
+所以这套方案最适合：
+
+- 个人使用
+- 先快速验证需求
+- 做“你的第一个 Agent”原型
+
+---
+
+## 第 1 步：安装 Hermes（10分钟）
+
+在终端执行：
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+source ~/.zshrc
+```
+
+验证：
+
+```bash
+hermes version
+```
+
+能看到版本号就说明安装成功。
+
+---
+
+## 第 2 步：选择模型（10分钟）
+
+执行：
+
+```bash
+hermes model
+```
+
+推荐按这套已验证配置：
+
+1. 选择 OpenAI Codex 路线
+2. 出现导入提示时，输入 `y`（复用本机已有 Codex 凭据）
+
+你会看到类似：
+
+- `model.provider=openai-codex`
+- 默认模型已设置（如 `gpt-5.4-mini`）
+
+---
+
+## 第 3 步：接入个人微信（20分钟）
+
+执行：
+
+```bash
+hermes gateway setup
+```
+
+在向导里按下面选（这是本次成功复现配置）：
+
+1. 平台选择：`Weixin / WeChat`
+2. 登录方式：`Scan QR code ... automatically`
+3. 微信扫码 + 手机确认
+4. 私聊权限：`Allow all direct messages`
+5. 群聊权限：`Disable group chats`
+6. `Use your Weixin user ID as the home channel?` 选 `Y`
+7. 返回平台列表后选 `Done`
+8. 提示是否安装 launchd 服务时，先选 `n`
+
+> 为什么先不装后台服务？  
+> 因为第一次建议前台跑，出现问题更容易排查。
+
+---
+
+## 第 4 步：启动网关并测试（10分钟）
+
+执行：
+
+```bash
+hermes gateway
+```
+
+然后用微信私聊你的 bot，发送：
+
+- `你好`
+- `请介绍一下你能帮我做什么`
+
+如果收到回复，恭喜你，你的第一个微信 Agent 已上线。
+
+---
+
+## 第 5 步：给 Agent 一个健康管理身份（5分钟）
+
+你可以直接在对话里定义它的人设，例如：
+
+```text
+从现在开始你是我的健康管理师，语气温和、务实。
+你需要帮助我管理睡眠、饮食、运动和复盘。
+每天给我一个小目标，回答尽量简洁并可执行。
+```
+
+如果你想给它取名，可以用：
+
+- `Seren`（推荐，温和且有“平衡”感）
+- `Clara`
+- `Aurelia`
+
+---
+
+## 常见问题（你大概率会遇到）
+
+### 1）`pip: command not found`
+
+在这套安装方式下不一定需要系统 `pip`。  
+优先确保 `hermes` 命令可用，直接继续 `hermes gateway setup` 即可。
+
+### 2）网关启动了但微信没回复
+
+按顺序排查：
+
+1. 网关终端是否还在运行（没被关掉）
+2. 是否在“私聊”测试（不是群聊）
+3. 重启一次网关：
+
+```bash
+# 在网关终端 Ctrl+C 停止后重启
+hermes gateway
+```
+
+### 3）能拉进微信群吗？
+
+大多数情况下不行。  
+这是 iLink bot 身份限制，不是你配置错误。个人微信方案请以私聊为主。
+
+---
+
+## 进阶建议（跑通后再做）
+
+- 把私聊权限从 `Allow all` 改为更安全的策略（pairing/allowlist）
+- 开启开机自启：
+
+```bash
+hermes gateway install
+hermes gateway start
+```
+
+- 优化提示词，打造“健康管理师”专属流程（晨间提醒、晚间复盘、每周总结）
+
+---
+
+## 30秒复盘：你到底做成了什么
+
+你不是“装了一个 AI 工具”，而是完成了三件关键事：
+
+1. 让 Agent 真正连上了微信入口  
+2. 让模型能力进入了日常沟通场景  
+3. 让“想法”变成了“可持续使用的个人系统”  
+
+这就是你在微信里的第一个 Agent。
+
+---
+
+## 一键命令清单（文末收藏）
+
+```bash
+# 安装
+curl -fsSL https://raw.githubusercontent.com/NousResearch/hermes-agent/main/scripts/install.sh | bash
+source ~/.zshrc
+
+# 配模型
+hermes model
+
+# 配微信
+hermes gateway setup
+
+# 启动网关
+hermes gateway
+```
+
+如果你准备写下一篇，可以继续做：  
+《第二篇：把这个微信 Agent 变成“健康管理闭环”——提醒、复盘、周报自动化》。

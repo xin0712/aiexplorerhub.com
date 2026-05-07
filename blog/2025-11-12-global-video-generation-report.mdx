@@ -1,0 +1,81 @@
+---
+title: 全球视频生成模型调研报告
+date: 2025-11-12
+slug: global-video-generation-landscape
+authors: [default]
+tags: [AI, 视频生成, T2V, 调研]
+---
+
+**——从 Sora 到通义万相，AI 视频生成技术的全景分析**
+
+## 一、研究背景
+
+| 主题 | 说明 |
+| --- | --- |
+| 技术跃迁背景 | 2024 年 OpenAI Sora 推动 Text-to-Video（T2V）进入高保真阶段，在时空一致性、物理逻辑与光影还原上逼近真实世界。 |
+| 调研目的 | 全球模型沿多条技术路线演化，形成“国外技术领先、国内落地加速”格局；本文聚焦模型格局、技术路径、应用方向、实践路线与趋势。 |
+
+## 二、国际主流模型格局
+
+| 阵营 / 模型 | 定位 | 关键要点 |
+| --- | --- | --- |
+| OpenAI Sora | 端到端高保真 T2V | 采用 Diffusion Transformer（DiT）；最长 60 秒；构建 3D 世界模型以保持物理一致性与复杂镜头运动。 |
+| Google Veo / Imagen Video / Phenaki | 多层级与长视频 | Veo 定位为 Sora 竞品尚未开放；Imagen Video 级联 Diffusion；Phenaki 以 Transformer 支撑跨场景长视频。 |
+| Meta Emu Video / Make-A-Video | 多模态融合与视频编辑 | 结合图像、文本、动作信息；Emu Video 强调高分辨率质量与编辑一致性。 |
+| Runway Gen-2 / Pika Labs / Stability AI | 商业与开源生态 | Runway 为最早 Prompt-to-Video 商业平台；Pika 轻量面向创意短视频；Stable Video Diffusion 开源可复现利于科研与集成。 |
+
+## 三、国内视频生成模型现状
+
+| 阵营 | 核心产品 | 能力亮点 |
+| --- | --- | --- |
+| 字节跳动（火山引擎） | MagicVideo / MagicAnimate | 关注视频一致性与人物动作；MagicAnimate 支持图像驱动人物动画。 |
+| 百度 | 文心一格视频版 / ERNIE-Video | 基于文心大模型的多模态扩展，覆盖文本、图像到视频的生成。 |
+| 阿里巴巴 | 通义万相视频 / MAA | 融入通义多模态体系，可 API 接入，强调商业化落地与内容合规。 |
+| 腾讯 | HunyuanVideo / ARC Lab | 借助混元多模态能力，布局 AIGC 内容生产全链路。 |
+| 科研与开源社区 | ModelScope T2V、VideoCrafter2、AnimateDiff、LivePortrait | ModelScope 为中文开源代表；VideoCrafter 系列提供高质量 Diffusion；AnimateDiff/LivePortrait 擅长动作迁移与编辑。 |
+
+## 四、技术路线分析
+
+| 技术路线 | 代表模型 | 特征与适用场景 |
+| --- | --- | --- |
+| Diffusion-based | Sora, Veo, ModelScope T2V | 当前主流路线，画质与时序稳定性最佳 |
+| GAN-based | MoCoGAN, TGAN | 早期方案，实时性高但清晰度较差 |
+| Autoregressive / Transformer-based | Phenaki, VideoGPT | 适合长视频生成，但成本高 |
+| Latent Consistency Models (LCM) | Stable Video Diffusion, AnimateDiff | 生成效率高，编辑友好 |
+| Motion Control / Animation Transfer | MagicAnimate, VideoCrafter2 | 用于人物驱动、视频编辑场景 |
+
+## 五、应用方向与代表模型
+
+| 应用方向 | 典型模型 | 研究重点 |
+| --- | --- | --- |
+| 文本生成视频 (T2V) | Sora, Veo, ModelScope | Prompt 解析、时空一致性 |
+| 图生视频 (I2V) | Runway, Pika, AnimateDiff | 运动推理与连贯性 |
+| 视频续写 / 补帧 | Stable Video Diffusion | 光流预测、帧间插值 |
+| 人物动画生成 | MagicAnimate, LivePortrait | 骨架追踪、动作驱动 |
+| 视频风格迁移 / 编辑 | Emu Video, ModelScope Editing | 内容保持与时序同步 |
+| 3D 视频与多视角生成 | Sora, 3D-GS, Luma Dream Machine | 世界建模、相机轨迹预测 |
+
+## 六、调研路线与实践建议
+
+| 阶段 | 行动重点 | 代表资源 / 指标 |
+| --- | --- | --- |
+| 阶段一：开源模型实践 | 验证可落地模型 | ModelScope T2V、VideoCrafter2、AnimateDiff、Stable Video Diffusion |
+| 阶段二：前沿论文学习 | 跟进最新理论与架构 | OpenAI Sora 白皮书、Google Veo 技术报告、Meta Emu Video 论文 |
+| 阶段三：国内 API 与产业实践 | 结合企业级能力 | 通义万相视频 API、百度文心视频平台、火山引擎 AIGC Studio |
+| 阶段四：统一评测体系构建 | 定义量化指标 | 画质（SSIM/FID/CLIP-score）、时序一致性（光流误差/帧间平滑）、语义对齐（Prompt 评分）、效率（帧率/延迟/显存） |
+
+## 七、未来趋势展望
+
+| 趋势 | 说明 |
+| --- | --- |
+| 视频理解与生成融合 | 模型将从单向生成迈向可交互理解，实现场景内物体控制与事件编辑。 |
+| 物理世界建模 | Sora 展示 AI 向世界模拟能力演进，强调真实物理与光影。 |
+| 生态化落地 | AIGC 深入短视频、广告、影视、教育等行业，形成内容生产闭环。 |
+| 轻量化与边缘部署 | 面向多设备、低延迟的生成需求，模型推理与部署更轻量高效。 |
+
+## 八、结语
+
+| 结论 | 关键信息 |
+| --- | --- |
+| 竞争本质 | 视频生成模型的核心在于世界建模能力，Sora/Veo 代表技术上限，国内通义/文心/火山引擎加速商业化。 |
+| 三年展望 | 视频生成将成为 AIGC 核心战场，从文本到动态世界的生成将重构内容创作范式。 |

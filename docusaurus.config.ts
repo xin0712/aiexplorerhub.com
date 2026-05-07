@@ -4,9 +4,13 @@ import type * as Preset from '@docusaurus/preset-classic';
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+// Enable GA only when explicitly requested in production builds
+const isProd = process.env.NODE_ENV === 'production';
+const enableGtag = isProd && process.env.GA_ENABLED === 'true';
+
 const config: Config = {
-  title: 'WealthHub',
-  tagline: '用正确观念与优质信息，构建可持续的个人理财体系。',
+  title: 'AIExplorerHub',
+  tagline: 'AI正在重构人类的思维与工作方式。我们关注如何通过实践验证、从日常细节入手，建立面向未来的思维与行为模式。',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -26,7 +30,12 @@ const config: Config = {
   projectName: 'docusaurus', // Usually your repo name.
 
   onBrokenLinks: 'warn',
-  onBrokenMarkdownLinks: 'warn',
+  markdown: {
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+      onBrokenMarkdownImages: 'warn',
+    },
+  },
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
@@ -42,6 +51,7 @@ const config: Config = {
       {
         docs: {
           sidebarPath: './sidebars.ts',
+          routeBasePath: '/_hidden-docs',
         },
         blog: {
           showReadingTime: true,
@@ -73,7 +83,7 @@ const config: Config = {
       /** @type {import('@easyops-cn/docusaurus-search-local').PluginOptions} */ (
         {
           hashed: true,
-          docsRouteBasePath: '/docs',
+          docsRouteBasePath: '/_hidden-docs',
           highlightSearchTermsOnTargetPage: true,
           language: ['zh', 'en'],
         }
@@ -81,9 +91,9 @@ const config: Config = {
     ],
   ],
 
-  // Plugins（仅在生产环境启用 gtag，避免本地预览受拦截插件影响报错）
+  // Plugins（仅在生产环境且设置 GA_ENABLED=true 时启用 gtag）
   plugins: [
-    ...(process.env.NODE_ENV === 'production'
+    ...(enableGtag
       ? [
           [
             require.resolve('@docusaurus/plugin-google-gtag'),
@@ -112,27 +122,14 @@ const config: Config = {
       },
     },
     navbar: {
-      title: 'WealthHub',
+      title: 'AIExplorerHub',
       logo: {
         alt: 'My Site Logo',
         src: 'img/logo.svg',
       },
       items: [
-        {type: 'docSidebar', sidebarId: 'kechengSidebar', label: '🎓 课程', position: 'left'},
-        {type: 'docSidebar', sidebarId: 'jingyanSidebar', label: '🧭 经验', position: 'left'},
-        {type: 'docSidebar', sidebarId: 'qudaoSidebar', label: '🔗 渠道', position: 'left'},
-        {type: 'docSidebar', sidebarId: 'gongjuSidebar', label: '🛠️ 工具', position: 'left'},
-        {type: 'docSidebar', sidebarId: 'shipinSidebar', label: '🎬 视频', position: 'left'},
-        {type: 'docSidebar', sidebarId: 'bokeSidebar', label: '🎧 播客', position: 'left'},
-        {
-          type: 'docSidebar',
-          sidebarId: 'shujiSidebar',
-          label: '📚 书籍',
-          position: 'left',
-        },
-        {to: '/blog', label: '📝 更新日志', position: 'left'},
+        {to: '/blog', label: 'blog', position: 'left'},
         {type: 'search', position: 'right'},
-        {to: '/feedback', label: '💬 反馈', position: 'right'},
       ],
     },
     footer: {

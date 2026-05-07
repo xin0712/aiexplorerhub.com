@@ -19,8 +19,8 @@ function HomepageHeader() {
           </Heading>
           <p className={styles.heroSubtitle}>{siteConfig.tagline}</p>
           <div className={styles.buttons}>
-            <Link className="button button--primary button--lg" to="/docs/shuji/reading-guide">
-              开始学习
+            <Link className="button button--primary button--lg" to="/blog">
+              进入博客
             </Link>
           </div>
         </div>
@@ -47,17 +47,26 @@ function ThreeColumns() {
         <h2 className={styles.sectionTitle}>基本介绍</h2>
         <div className={styles.featuresGrid}>
           <div className={styles.featureItem}>
-            <h3>关于本教程</h3>
-            <p>如果你开始有意愿打理自己的金钱，那么这份教程可以帮助你从零开始建立起一套可执行的路径。至少，不会让你在错误的道路上越走越远。</p>
+            <h3>一、关于本教程</h3>
+            <p>本教程旨在系统探讨 AI 技术普及对个体思维方式、工作模式与生活习惯的长期影响。</p>
+            <p>我们关注的，不是具体工具的使用技巧，而是这些工具背后所映射的认知模型与方法论变革。</p>
+            <p>通过结构化的知识整理、案例研究与实践复盘，本教程希望帮助读者在智能化浪潮中构建可持续的思维体系与行动框架。</p>
           </div>
           <div className={styles.featureItem}>
-            <h3>它不是什么？</h3>
-            <p>本教程不是“速成秘籍”，而是强调方法论与原则，帮助你理解为什么有效。如果你相信自己的学习能力，并且愿意付出时间，那么这份教程可以帮助你少走弯路。本教程也不是权威指南，因为在这个领域，我也是个学生。</p>
+            <h3>二、它不是什么</h3>
+            
+              <p>这不是一份“教你快速掌握AI工具”的操作指南。</p>
+              <p>它不追求“爆款提示词”或“捷径技巧”，也不提供任何速成方案。</p>
+              <p>它不以追逐新概念或热点为目标，而以理性、验证与长期价值为原则。</p>
+              <p>本教程不鼓励被动消费AI成果，而强调主动理解技术逻辑与重构思维方式。</p>
+            
           </div>
           <div className={styles.featureItem}>
-            <h3>为什么写这份教程</h3>
-            <p>作为一个初学者，研究个人投资和理财的时候，发现很多知识都过于碎片化，或者过于理论化，难以实践。</p>
-            <p>所以想写一份教程，帮助大家从零开始建立起一套可执行的路径。</p>
+            <h3>三、为什么写这份教程</h3>
+            <p>AI技术正在以前所未有的速度渗透到生产与生活的每一个环节。</p>
+            <p>但真正拉开差距的，不是“谁用的工具更多”，而是“谁能更早在实践中完成思维与习惯的重构”。</p>
+            <p>我们希望通过这份教程，帮助读者从可操作的角度理解AI带来的结构性变革，</p>
+            <p>在小处实践，在行动中反思，逐步形成适应智能时代的思维模型与知识体系。</p>
           </div>
         </div>
       </div>
