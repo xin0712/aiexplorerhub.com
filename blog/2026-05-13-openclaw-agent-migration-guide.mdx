@@ -1,0 +1,285 @@
+---
+title: 从一只虾迁移到另一只虾：OpenClaw / Hermes 高保真迁移指南
+date: 2026-05-13T09:35:00+08:00
+slug: openclaw-agent-migration-guide
+authors: [default]
+tags: [AI, GPT]
+---
+
+从一只虾迁移到另外一只虾，本质不是“复制一个软件”，而是迁移这几类关键资产：
+
+1. 人格设定 / Prompt
+2. 长期记忆 / Memory
+3. 技能 / Skills
+4. 工具权限 / API Key / 登录态
+5. 历史会话 / 日志
+6. 任务配置 / 定时任务 / 工作流
+7. 运行环境 / Docker / 数据库 / 文件目录
+
+“无损迁移”通常很难，因为不同平台对记忆、会话、工具调用的格式并不一致；但可以做到高保真迁移。  
+OpenClaw 圈里也常讨论从 OpenClaw 或其他平台迁到 Hermes，本质问题其实是：迁走的到底是 Prompt 壳子，还是记忆和上下文。
+
+<!-- truncate -->
+
+## 一、最稳妥的迁移思路
+
+建议按以下顺序进行。
+
+### 第一步：导出旧虾的核心资料
+
+先定位旧虾数据目录，重点备份：
+
+- `prompts/`
+- `memory/`
+- `skills/`
+- `logs/`
+- `config/`
+- `.env`
+- `docker-compose.yml`
+- `data/`
+
+如果是 Docker 部署，可以先看容器挂载目录：
+
+```bash
+docker ps
+docker inspect <容器名>
+```
+
+重点关注：
+
+- `Mounts`
+- `Env`
+- `WorkingDir`
+
+然后打包：
+
+```bash
+tar -czvf old-claw-backup.tar.gz ./openclaw-data ./skills ./config .env docker-compose.yml
+```
+
+### 第二步：把“人格”和“记忆”分开处理
+
+不要只复制 Prompt。真正决定这只虾像不像原来的，主要是这些层：
+
+| 类型 | 作用 |
+| --- | --- |
+| System Prompt | 角色、语气、边界 |
+| Memory | 偏好、项目、长期任务 |
+| Conversation Logs | 过去如何协作 |
+| Skills | 能做哪些操作 |
+| Tool Config | 能调用哪些工具 |
+| API Key / Token | 是否有权限执行任务 |
+
+建议单独整理一份迁移文件（比原始聊天记录更重要）：
+
+```markdown
+# 虾的人格设定
+## 角色
+你是我的个人 AI 助理，负责……
+
+## 说话风格
+简洁、直接、偏执行……
+
+## 长期记忆
+- 我正在做……
+- 我常用……
+- 我的偏好是……
+
+## 常用任务
+- 每天整理……
+- 帮我分析……
+- 自动发布……
+```
+
+### 第三步：迁移 Skills
+
+如果旧虾有自定义技能，可直接复制技能目录：
+
+```bash
+cp -r old_openclaw/skills new_openclaw/skills
+```
+
+如果技能依赖 Python 包或 Node 包，还要同步这些依赖文件：
+
+- `requirements.txt`
+- `package.json`
+
+并在新环境安装：
+
+```bash
+pip install -r requirements.txt
+npm install
+```
+
+### 第四步：迁移工具权限
+
+这一步最容易出问题。需要检查旧虾是否配置了这些变量：
+
+```bash
+OPENAI_API_KEY=
+ANTHROPIC_API_KEY=
+GITHUB_TOKEN=
+NOTION_TOKEN=
+FEISHU_APP_ID=
+FEISHU_APP_SECRET=
+GMAIL_TOKEN=
+```
+
+迁移时不要只复制代码，还要复制 `.env` 或重新配置密钥。
+
+但要注意：登录态、Cookie、OAuth Token 不一定能直接迁移。  
+比如 Gmail、飞书、Notion、微信、浏览器自动化等，换机器后通常需要重新授权。
+
+### 第五步：迁移数据库或向量记忆
+
+常见存储包括：
+
+- `sqlite`
+- `postgres`
+- `chroma`
+- `qdrant`
+- `milvus`
+- `redis`
+
+先判断数据在文件里，还是在外部数据库里。
+
+如果是 SQLite：
+
+```bash
+cp old.db new.db
+```
+
+如果是 Postgres：
+
+```bash
+pg_dump old_db > backup.sql
+psql new_db < backup.sql
+```
+
+如果是向量数据库，建议直接迁移整个 volume：
+
+```bash
+docker volume ls
+docker volume inspect <volume_name>
+docker run --rm -v old_volume:/data -v $(pwd):/backup alpine tar czf /backup/vector-backup.tar.gz /data
+```
+
+## 二、推荐迁移流程：旁路迁移 + 验证
+
+最稳的方式不是直接覆盖新虾，而是旁路迁移并逐步验证。
+
+### 迁移前
+
+- 旧虾继续运行
+- 新虾单独部署
+- 旧虾数据完整备份
+
+### 迁移中
+
+按顺序进行：
+
+1. 先迁 Prompt
+2. 再迁 Memory
+3. 再迁 Skills
+4. 再迁工具权限
+5. 最后迁任务和历史数据
+
+### 迁移后：测试 5 类任务
+
+你可以直接问新虾：
+
+1. 你还记得我现在主要在做什么项目吗？
+2. 你平时应该怎么帮我处理任务？
+3. 调用一个我常用的 Skill 测试一下。
+4. 读取一下我的历史配置。
+5. 执行一个低风险任务（比如生成日报，不要发出去）。
+
+## 三、如果你是从 OpenClaw 迁到 Hermes
+
+迁移重点不是“复制文件”，而是做一层**记忆适配**。
+
+因为 Hermes 未必直接读取 OpenClaw 的 Memory 格式。建议先整理成中间格式，再导入新虾：
+
+```json
+{
+  "identity": "这只虾的角色定位",
+  "user_preferences": [],
+  "long_term_projects": [],
+  "tools": [],
+  "skills": [],
+  "important_history": [],
+  "do_not_do": []
+}
+```
+
+推荐链路是：
+
+旧虾原始记忆 -> 清洗总结 -> 标准化记忆文件 -> 新虾导入
+
+这样通常比“硬复制 memory 文件”更稳。
+
+## 四、可直接复用的迁移清单
+
+```markdown
+# 虾迁移清单
+
+## 1. 基础环境
+- [ ] Docker 镜像版本
+- [ ] docker-compose.yml
+- [ ] .env 配置
+- [ ] 数据挂载目录
+- [ ] 依赖包
+
+## 2. 人格设定
+- [ ] system prompt
+- [ ] 角色定位
+- [ ] 说话风格
+- [ ] 禁止事项
+- [ ] 默认工作流
+
+## 3. 记忆
+- [ ] 用户长期偏好
+- [ ] 项目信息
+- [ ] 常用账号/平台说明
+- [ ] 历史决策
+- [ ] 工作习惯
+
+## 4. 技能
+- [ ] skills 目录
+- [ ] skill 配置文件
+- [ ] skill 依赖
+- [ ] skill 测试用例
+
+## 5. 工具权限
+- [ ] API Key
+- [ ] OAuth 授权
+- [ ] Cookie
+- [ ] 浏览器 Profile
+- [ ] 文件系统权限
+
+## 6. 历史数据
+- [ ] 聊天记录
+- [ ] 日志
+- [ ] 任务记录
+- [ ] 向量数据库
+- [ ] 本地文件
+
+## 7. 验证
+- [ ] 能正常启动
+- [ ] 能读取记忆
+- [ ] 能调用工具
+- [ ] 能执行 skill
+- [ ] 能完成旧虾常做任务
+```
+
+## 五、一句话结论
+
+从一只虾迁移到另一只虾，核心不是搬代码，而是搬：
+
+**人格 + 记忆 + 技能 + 权限 + 数据**
+
+最稳方案是：
+
+**先备份旧虾 -> 搭新虾 -> 导入人格和记忆 -> 迁移 Skills -> 重新授权工具 -> 小任务验证 -> 正式切换**
+
+不要一上来直接覆盖新环境，否则很容易出现：虾能启动，但“不认识你”“不会原来的技能”“工具没权限”。

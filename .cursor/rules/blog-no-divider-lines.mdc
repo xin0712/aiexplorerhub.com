@@ -1,0 +1,23 @@
+---
+description: Blog posts must not use horizontal divider lines in body content
+globs: blog/**/*.{md,mdx}
+alwaysApply: false
+---
+
+# Blog 分割线规范
+
+- Blog 正文中禁止使用分割线 `---`。
+- 允许保留 frontmatter 的 `---`（文件头元数据边界）。
+- 如果需要段落分隔，请直接使用小标题（`##` / `###`）或留空行。
+
+## 示例
+
+```md
+---
+title: 示例标题
+date: 2026-01-01
+---
+
+## 一、背景
+正文内容...
+```
