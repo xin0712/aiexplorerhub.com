@@ -1,0 +1,9 @@
+{
+  "label": "资料篇",
+  "position": 5,
+  "link": {
+    "type": "generated-index",
+    "title": "资料篇",
+    "slug": "/claude-code/resources"
+  }
+}

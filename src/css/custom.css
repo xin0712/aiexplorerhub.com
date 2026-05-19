@@ -94,3 +94,32 @@
   --ifm-color-primary-lightest: #32285a;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* 页脚内容区宽度调整为原来的一半（桌面端） */
+.footer .container {
+  max-width: 50%;
+}
+
+/* 移动端保持可读性，避免过窄 */
+@media (max-width: 996px) {
+  .footer .container {
+    max-width: 100%;
+  }
+}
+
+/* 极简页脚：仅保留版权行 */
+.footer {
+  --ifm-footer-padding-vertical: 0.35rem;
+  padding-top: var(--ifm-footer-padding-vertical) !important;
+  padding-bottom: var(--ifm-footer-padding-vertical) !important;
+}
+
+.footer__links {
+  display: none !important;
+}
+
+.footer__bottom {
+  padding: 0 !important;
+  margin: 0 !important;
+  text-align: center;
+}

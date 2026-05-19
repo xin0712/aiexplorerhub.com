@@ -128,8 +128,9 @@ const config: Config = {
         src: 'img/logo.svg',
       },
       items: [
-        {to: '/_hidden-docs/agent/core-terms', label: 'agent', position: 'left'},
-        {to: '/blog', label: 'blog', position: 'left'},
+        {to: '/_hidden-docs/agent/core-terms', label: 'Agent', position: 'left'},
+        {to: '/_hidden-docs/claude-code/basic', label: 'Claude Code', position: 'left'},
+        {to: '/blog', label: 'Blog', position: 'left'},
         {type: 'search', position: 'right'},
       ],
     },

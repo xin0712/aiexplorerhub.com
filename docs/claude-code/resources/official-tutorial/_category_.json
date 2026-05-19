@@ -1,0 +1,9 @@
+{
+  "label": "官方教程",
+  "position": 1,
+  "link": {
+    "type": "generated-index",
+    "title": "官方教程",
+    "slug": "/claude-code/resources/official-tutorial"
+  }
+}
