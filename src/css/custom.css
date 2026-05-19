@@ -123,3 +123,28 @@
   margin: 0 !important;
   text-align: center;
 }
+
+/* 文档封面图样式 */
+.doc-cover-image {
+  display: block;
+  width: 100%;
+  max-width: 920px;
+  margin: 0 auto 1.25rem auto;
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* 将 tip 高亮块调整为站点主色系淡紫风格 */
+.alert--success {
+  --ifm-alert-background-color: #f4f1ff;
+  --ifm-alert-background-color-highlight: #ece7ff;
+  --ifm-alert-foreground-color: #2f2660;
+  --ifm-alert-border-color: #8b7ff0;
+}
+
+[data-theme='dark'] .alert--success {
+  --ifm-alert-background-color: rgba(139, 127, 240, 0.18);
+  --ifm-alert-background-color-highlight: rgba(139, 127, 240, 0.24);
+  --ifm-alert-foreground-color: #e1ddfa;
+  --ifm-alert-border-color: #bcb3fa;
+}
