@@ -130,6 +130,7 @@ const config: Config = {
       items: [
         {to: '/_hidden-docs/agent/core-terms', label: 'Agent', position: 'left'},
         {to: '/_hidden-docs/claude-code/basic', label: 'Claude Code', position: 'left'},
+        {to: '/_hidden-docs/shuji/reading-guide', label: 'Books', position: 'left'},
         {to: '/blog', label: 'Blog', position: 'left'},
         {type: 'search', position: 'right'},
       ],
