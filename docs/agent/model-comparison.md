@@ -60,3 +60,12 @@ sidebar_position: 3
 - **文本**：默认用 DeepSeek V4 Flash / Qwen Flash（便宜够用），要质量再上 DeepSeek V4 Pro / GPT-5.5 / Claude Opus；
 - **图片**：中文物料用即梦 / 万相，追求美学用 Midjourney，要 API 集成用 FLUX；
 - **视频**：短剧角色一致用可灵 / 即梦，出海精品用 Veo，批量预演用 Vidu / 海螺。
+
+## 模型去哪访问（云平台）
+
+- **阿里系**（Qwen、万相）→ 阿里云百炼 / PAI（人工智能平台）
+- **字节系**（豆包、即梦）→ 火山方舟
+- **DeepSeek** → DeepSeek 官方 API
+- **智谱** → 智谱开放平台（bigmodel.cn）
+- **月之暗面** → Kimi 开放平台
+- **海外**（GPT / Claude / Gemini）→ 各官方 API / AWS Bedrock / Azure / Vertex AI
