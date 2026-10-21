@@ -7,13 +7,14 @@ sidebar_position: 2
 
 项目（Project / Runtime）是**拿来「用」或「学」的成品**——装好就能跑，也可以读源码学习别人的工程思路。
 
-| 项目 | 仓库 | 一句话 |
-|------|------|--------|
-| [ThinCoder](https://github.com/xinbo-tech/thincoder) | xinbo-tech | MIT、零依赖 Node.js、三端（CLI / VS Code / 桌面）+ ACP，工程洁癖代表作 |
-| [DeepSeek Harness](https://github.com/deepseek-ai/deepseek-harness) | deepseek-ai | MIT、「一切皆插件」、基于 Cordis 微内核，连 agent 主循环都可替换 |
-| Claude Code | Anthropic | 闭源，Anthropic 的旗舰编码 Agent |
-| Codex | OpenAI | 闭源（CLI 部分开源），OpenAI 的编码 Agent |
-| OpenCode / Pi Agent | 开源社区 | 轻量开源编码 Agent，基准测试里的黑马 |
+| 项目 | 出品方 | 开源地址 | 一句话 |
+|------|--------|---------|--------|
+| ThinCoder | xinbo-tech | [github](https://github.com/xinbo-tech/thincoder) | MIT、零依赖 Node.js、三端（CLI / VS Code / 桌面）+ ACP |
+| QwenPaw | 阿里（AgentScope 团队）| [github](https://github.com/agentscope-ai/QwenPaw) | Apache-2.0、本地优先的个人 AI 助手 |
+| DeepSeek Harness | DeepSeek | [github](https://github.com/deepseek-ai/deepseek-harness) | MIT、「一切皆插件」运行时 |
+| Claude Code | Anthropic | 闭源 | Anthropic 的旗舰编码 Agent |
+| Codex | OpenAI | 闭源（CLI 部分开源）| OpenAI 的编码 Agent |
+| OpenCode / Pi Agent | 开源社区 | GitHub 可搜 | 轻量开源编码 Agent |
 
 ## 两个值得深挖的极端
 
