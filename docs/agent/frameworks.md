@@ -18,6 +18,7 @@ sidebar_position: 1
 | AgentScope | 阿里（AgentScope 团队）| [github](https://github.com/agentscope-ai/agentscope) | 多智能体、阿里生态 |
 | QwenPaw | 阿里（AgentScope 团队）| [github](https://github.com/agentscope-ai/QwenPaw) | 本地优先的个人 Agent 框架（Apache-2.0）|
 | DeepSeek Harness | DeepSeek | [github](https://github.com/deepseek-ai/deepseek-harness) | 「一切皆插件」、基于 Cordis 微内核 |
+| Codex Harness | OpenAI | [github](https://github.com/openai/codex) | Rust 内核、Apache-2.0、生产级嵌入 |
 | Spring AI Alibaba | 阿里 | [github](https://github.com/alibaba/spring-ai-alibaba) | Java 技术栈 |
 | Microsoft Agent Framework | 微软 | GitHub 可搜 | .NET 或 Azure 生态 |
 | Google ADK | Google | GitHub 可搜 | Google 生态 |

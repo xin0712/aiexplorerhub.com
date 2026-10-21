@@ -13,7 +13,7 @@ sidebar_position: 2
 | QwenPaw | 阿里（AgentScope 团队）| [github](https://github.com/agentscope-ai/QwenPaw) | Apache-2.0、本地优先的个人 AI 助手 |
 | DeepSeek Harness | DeepSeek | [github](https://github.com/deepseek-ai/deepseek-harness) | MIT、「一切皆插件」运行时 |
 | Claude Code | Anthropic | 闭源 | Anthropic 的旗舰编码 Agent |
-| Codex | OpenAI | 闭源（CLI 部分开源）| OpenAI 的编码 Agent |
+| Codex | OpenAI | [github](https://github.com/openai/codex) | 编码 Agent，Harness（codex-rs）已 Apache-2.0 开源 |
 | OpenCode / Pi Agent | 开源社区 | GitHub 可搜 | 轻量开源编码 Agent |
 
 ## 两个值得深挖的极端
