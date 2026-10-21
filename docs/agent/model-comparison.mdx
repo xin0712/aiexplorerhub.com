@@ -1,0 +1,192 @@
+---
+title: 模型对比（质量 & 价格）
+sidebar_position: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# 模型对比：质量 & 价格
+
+给 Agent 设计者做「给用户推荐模型」的参考。三张表（文本 / 图片 / 视频）都拆到**模型 ID 粒度**，每张提供「按性价比 / 按价格 / 按质量」三种排序，点标签切换。
+
+:::warning 模型 ID 与价格会变
+本页为 2026-10 快照。模型 ID 会随版本迭代更新，价格常变（尤其国内模型的峰谷价、订阅 vs 按量差异大）。**调用前务必以各厂商官方文档为准。**
+:::
+
+## 文本模型
+
+计价单位：元 / 百万 token（输出价为主）。
+
+<Tabs>
+<TabItem value="性价比" label="按性价比" default>
+
+| 模型 ID | 厂商 | 质量档 | 价格（输出） | 说明 |
+|------|------|-------|-----------|------|
+| deepseek-v4-flash | DeepSeek | 高性价比 | ¥8（高峰）/ ¥4（空闲）| 超便宜、吞吐高 |
+| qwen-flash | 阿里 | 高性价比 | 便宜 | 长上下文工程 Agent |
+| glm-flash | 智谱 | 高性价比 | 便宜 | 编程接近 Opus |
+| doubao-seed-2.1-pro | 字节 | 高性价比 | 便宜 | 便宜量大 |
+| kimi-k2.6 | 月之暗面 | 高性价比 | 约 $3.5 | Agent 多步编排 |
+| deepseek-v4-pro | DeepSeek | 旗舰 | 约 $4–5 | 综合旗舰、性价比之王 |
+| claude-sonnet-5 | Anthropic | 高端 | 中档 | Claude 里的性价比 |
+| qwen-max | 阿里 | 旗舰 | 中档 | benchmark 冠军 |
+| kimi-k3 | 月之暗面 | 旗舰 | 约 $14 | 国产旗舰，1M 上下文 |
+| claude-opus-5-5 | Anthropic | 旗舰 | $25 | 编程 / 长文最强 |
+| gpt-5.5 | OpenAI | 旗舰 | $30 | 综合最强，最贵 |
+
+</TabItem>
+<TabItem value="价格" label="按价格">
+
+| 模型 ID | 厂商 | 质量档 | 价格（输出） | 说明 |
+|------|------|-------|-----------|------|
+| deepseek-v4-flash | DeepSeek | 高性价比 | ¥8（高峰）/ ¥4（空闲）| 超便宜、吞吐高 |
+| qwen-flash | 阿里 | 高性价比 | 便宜 | 长上下文工程 Agent |
+| glm-flash | 智谱 | 高性价比 | 便宜 | 编程接近 Opus |
+| doubao-seed-2.1-pro | 字节 | 高性价比 | 便宜 | 便宜量大 |
+| kimi-k2.6 | 月之暗面 | 高性价比 | 约 $3.5 | Agent 多步编排 |
+| deepseek-v4-pro | DeepSeek | 旗舰 | 约 $4–5 | 综合旗舰 |
+| kimi-k3 | 月之暗面 | 旗舰 | 约 $14 | 国产旗舰，1M 上下文 |
+| claude-sonnet-5 | Anthropic | 高端 | 中档 | Claude 性价比 |
+| qwen-max | 阿里 | 旗舰 | 中档 | benchmark 冠军 |
+| claude-opus-5-5 | Anthropic | 旗舰 | $25 | 编程 / 长文最强 |
+| gpt-5.5 | OpenAI | 旗舰 | $30 | 综合最强，最贵 |
+
+</TabItem>
+<TabItem value="质量" label="按质量">
+
+| 模型 ID | 厂商 | 质量档 | 价格（输出） | 说明 |
+|------|------|-------|-----------|------|
+| gpt-5.5 | OpenAI | 旗舰 | $30 | 综合最强，最贵 |
+| claude-opus-5-5 | Anthropic | 旗舰 | $25 | 编程 / 长文最强 |
+| kimi-k3 | 月之暗面 | 旗舰 | 约 $14 | 国产旗舰，1M 上下文 |
+| qwen-max | 阿里 | 旗舰 | 中档 | benchmark 冠军 |
+| deepseek-v4-pro | DeepSeek | 旗舰 | 约 $4–5 | 综合旗舰、性价比之王 |
+| claude-sonnet-5 | Anthropic | 高端 | 中档 | Claude 里的性价比 |
+| kimi-k2.6 | 月之暗面 | 高性价比 | 约 $3.5 | Agent 多步编排 |
+| deepseek-v4-flash | DeepSeek | 高性价比 | ¥8（高峰）/ ¥4（空闲）| 超便宜、吞吐高 |
+| qwen-flash | 阿里 | 高性价比 | 便宜 | 长上下文工程 Agent |
+| glm-flash | 智谱 | 高性价比 | 便宜 | 编程接近 Opus |
+| doubao-seed-2.1-pro | 字节 | 高性价比 | 便宜 | 便宜量大 |
+
+</TabItem>
+</Tabs>
+
+## 图片模型
+
+计价单位：元 / 张（订阅制的标月费）。
+
+<Tabs>
+<TabItem value="性价比" label="按性价比" default>
+
+| 模型 ID | 厂商 | 质量档 | 价格（约） | 说明 |
+|------|------|-------|-----------|------|
+| wan2.2-t2i | 阿里 | 高性价比 | ¥0.03–0.2/张 | 最便宜之一 |
+| flux-schnell | Black Forest Labs | 草稿 | $0.003/张 | 最便宜草稿 |
+| imagen-4 | Google | 写实 | $0.02–0.04/张 | 照片级写实 |
+| flux-1.1-pro | Black Forest Labs | 写实强 | $0.04/张 | 可控、可本地部署 |
+| seedream | 字节 | 中文友好 | ¥0.2/张 | 中文最强，即梦/豆包接入 |
+| midjourney-v7 | Midjourney | 美学天花板 | 订阅 $10–120/月 | 出图即惊艳，无 API |
+
+</TabItem>
+<TabItem value="价格" label="按价格">
+
+| 模型 ID | 厂商 | 质量档 | 价格（约） | 说明 |
+|------|------|-------|-----------|------|
+| flux-schnell | Black Forest Labs | 草稿 | $0.003/张 | 最便宜草稿 |
+| imagen-4 | Google | 写实 | $0.02–0.04/张 | 照片级写实 |
+| wan2.2-t2i | 阿里 | 高性价比 | ¥0.03–0.2/张 | 最便宜之一 |
+| flux-1.1-pro | Black Forest Labs | 写实强 | $0.04/张 | 可控、可本地部署 |
+| seedream | 字节 | 中文友好 | ¥0.2/张 | 中文最强 |
+| midjourney-v7 | Midjourney | 美学天花板 | 订阅 $10–120/月 | 出图即惊艳，无 API |
+
+</TabItem>
+<TabItem value="质量" label="按质量">
+
+| 模型 ID | 厂商 | 质量档 | 价格（约） | 说明 |
+|------|------|-------|-----------|------|
+| midjourney-v7 | Midjourney | 美学天花板 | 订阅 $10–120/月 | 出图即惊艳，无 API |
+| flux-1.1-pro | Black Forest Labs | 写实强 | $0.04/张 | 可控、可本地部署 |
+| imagen-4 | Google | 写实 | $0.02–0.04/张 | 照片级写实 |
+| seedream | 字节 | 中文友好 | ¥0.2/张 | 中文最强 |
+| wan2.2-t2i | 阿里 | 高性价比 | ¥0.03–0.2/张 | 最便宜之一 |
+| flux-schnell | Black Forest Labs | 草稿 | $0.003/张 | 最便宜草稿 |
+
+</TabItem>
+</Tabs>
+
+## 视频模型
+
+计价单位：元 / 秒（480p 起步价）或元 / 条。**Sora 已于 2026-03 停服，不再列入。**
+
+<Tabs>
+<TabItem value="性价比" label="按性价比" default>
+
+| 模型 ID | 厂商 | 质量档 | 起步价 | 说明 |
+|------|------|-------|-------|------|
+| vidu | 生数科技 | 性价比 | ¥0.04/条起 | 批量预演、最便宜 |
+| seedance-2.0-mini | 字节 | 性价比 | $0.04/秒（480p）| 草稿、试提示词 |
+| wan3.0 | 阿里 | 性价比 | $0.07/秒（480p）| 30 秒、1080p |
+| seedance-2.0-fast | 字节 | 性价比 | $0.06/秒（480p）| 快速走量 |
+| MiniMax-H3 | MiniMax | 性价比 | $0.11/秒（768p）| 2K、原生音频 |
+| kling-v2-5-turbo | 快手 | 性价比 | ¥5/条起（积分）| 快速便宜 |
+| seedance-2.0 | 字节 | 旗舰 | $0.07/秒（4K 最高 $1.37）| 唯一支持 4K |
+| kling-v2-6 | 快手 | 写实人物 | ¥12/条起（积分）| 中文口型最稳 |
+| gen4 | Runway | 专业 | $0.05/秒 | 4K、跨镜头一致 |
+| seedance-2.5 | 字节 | 长镜头 | $0.11/秒（480p）| 30 秒长片 |
+| veo-3.1 | Google | 出海精品 | $0.06/秒 | 148 秒、原生音频 |
+| kling-v3 | 快手 | 旗舰 | ¥45/条起（积分）| 旗舰 |
+
+</TabItem>
+<TabItem value="价格" label="按价格">
+
+| 模型 ID | 厂商 | 质量档 | 起步价 | 说明 |
+|------|------|-------|-------|------|
+| vidu | 生数科技 | 性价比 | ¥0.04/条起 | 批量预演、最便宜 |
+| seedance-2.0-mini | 字节 | 性价比 | $0.04/秒（480p）| 草稿、试提示词 |
+| gen4 | Runway | 专业 | $0.05/秒 | 4K、跨镜头一致 |
+| kling-v2-5-turbo | 快手 | 性价比 | ¥5/条起（积分）| 快速便宜 |
+| seedance-2.0-fast | 字节 | 性价比 | $0.06/秒（480p）| 快速走量 |
+| veo-3.1 | Google | 出海精品 | $0.06/秒 | 148 秒、原生音频 |
+| seedance-2.0 | 字节 | 旗舰 | $0.07/秒 | 唯一支持 4K |
+| wan3.0 | 阿里 | 性价比 | $0.07/秒（480p）| 30 秒、1080p |
+| MiniMax-H3 | MiniMax | 性价比 | $0.11/秒（768p）| 2K、原生音频 |
+| seedance-2.5 | 字节 | 长镜头 | $0.11/秒（480p）| 30 秒长片 |
+| kling-v2-6 | 快手 | 写实人物 | ¥12/条起（积分）| 中文口型最稳 |
+| kling-v3 | 快手 | 旗舰 | ¥45/条起（积分）| 旗舰 |
+
+</TabItem>
+<TabItem value="质量" label="按质量">
+
+| 模型 ID | 厂商 | 质量档 | 起步价 | 说明 |
+|------|------|-------|-------|------|
+| kling-v3 | 快手 | 旗舰 | ¥45/条起（积分）| 旗舰 |
+| veo-3.1 | Google | 出海精品 | $0.06/秒 | 148 秒、原生音频 |
+| gen4 | Runway | 专业 | $0.05/秒 | 4K、跨镜头一致 |
+| seedance-2.5 | 字节 | 长镜头 | $0.11/秒（480p）| 30 秒长片 |
+| seedance-2.0 | 字节 | 旗舰 | $0.07/秒（4K $1.37）| 唯一支持 4K |
+| kling-v2-6 | 快手 | 写实人物 | ¥12/条起（积分）| 中文口型最稳 |
+| MiniMax-H3 | MiniMax | 性价比 | $0.11/秒（768p）| 2K、原生音频 |
+| wan3.0 | 阿里 | 性价比 | $0.07/秒（480p）| 30 秒、1080p |
+| kling-v2-5-turbo | 快手 | 性价比 | ¥5/条起（积分）| 快速便宜 |
+| seedance-2.0-fast | 字节 | 性价比 | $0.06/秒（480p）| 快速走量 |
+| seedance-2.0-mini | 字节 | 性价比 | $0.04/秒（480p）| 草稿、试提示词 |
+| vidu | 生数科技 | 性价比 | ¥0.04/条起 | 批量预演、最便宜 |
+
+</TabItem>
+</Tabs>
+
+## 给 Agent 设计者的选型建议
+
+- **文本**：默认用 deepseek-v4-flash / qwen-flash（便宜够用），要质量再上 deepseek-v4-pro / gpt-5.5 / claude-opus-5-5；
+- **图片**：中文物料用 seedream / wan，追求美学用 Midjourney，要 API 集成用 flux；
+- **视频**：短剧角色一致用 kling / seedance，出海精品用 veo，批量预演用 vidu / MiniMax-H3。
+
+## 模型去哪访问（云平台）
+
+- **阿里系**（qwen、wan）→ 阿里云百炼 / PAI（人工智能平台）
+- **字节系**（doubao、seedream、seedance）→ 火山方舟
+- **DeepSeek** → DeepSeek 官方 API
+- **智谱** → 智谱开放平台（bigmodel.cn）
+- **月之暗面** → Kimi 开放平台
+- **海外**（GPT / Claude / Gemini）→ 各官方 API / AWS Bedrock / Azure / Vertex AI
