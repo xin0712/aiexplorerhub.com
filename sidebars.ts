@@ -61,6 +61,7 @@ const sidebars: SidebarsConfig = {
       items: [
         {type: 'doc', id: 'agent/frameworks'},
         {type: 'doc', id: 'agent/projects'},
+        {type: 'doc', id: 'agent/model-comparison'},
       ],
     },
   ],
