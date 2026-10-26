@@ -98,6 +98,54 @@ tool_calls= [
 **关键点**：模型的「回答」可能同时包含一段文字和一个 `tool_calls` 列表。
 只要 `tool_calls` 非空，就说明它**还没给出最终答案**——它在等你执行工具。
 
+### 拆一下 `chat()` 里那两行
+
+有个地方容易卡住，单独说一下：
+
+```python
+body = {"model": MODEL, "messages": messages, "stream": False}   # 这里只有 3 个键
+if tools:
+    body["tools"] = tools                                        # 这一行给它【加】了第 4 个键
+```
+
+**`body["tools"] = tools` 不是「修改」，是「新增一个键」。**
+
+Python 的字典是可变的，建好之后还能往里加东西。实际跑一下：
+
+```python
+body = {"model": "m", "messages": [], "stream": False}
+print(len(body))        # 3
+
+body["tools"] = [{"type": "function"}]
+print(len(body))        # 4 —— 同一个字典，多了一个键
+print(body)
+# {'model': 'm', 'messages': [], 'stream': False, 'tools': [{'type': 'function'}]}
+```
+
+所以它跟下面这种写法是**等价**的：
+
+```python
+if tools:
+    body = {"model": MODEL, "messages": messages, "stream": False, "tools": tools}
+else:
+    body = {"model": MODEL, "messages": messages, "stream": False}
+```
+
+文里选了前一种，因为后面还要加别的字段（`temperature`、`max_tokens` 等），
+用 `if` 一个个追加，比反复重写整个字典清爽。
+
+### 为什么写成「有才加」
+
+看函数签名：`def chat(messages, tools=None)`——`tools` 是**可选参数**。
+
+```python
+chat(msgs, TOOLS)   # 带工具：请求体里有 tools 字段
+chat(msgs)          # 不带：tools 是 None，那行不执行，请求体里就没这个字段
+```
+
+为什么需要「不带」的情况？因为不是每次调用都要工具。而且**省略比传空数组干净**——
+有些服务端对 `"tools": []` 的处理不一致，干脆不带。
+
 ## 四、v1：加上工具执行
 
 现在把工具真正跑起来，并把结果**回传**给模型。
