@@ -1,0 +1,192 @@
+/* ChatWidget 样式 —— 用 Docusaurus 的主题变量，自动适配亮色/暗色。 */
+
+.launcher {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 900;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--ifm-color-primary);
+  box-shadow: 0 4px 16px rgb(0 0 0 / 20%);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.launcher:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgb(0 0 0 / 28%);
+}
+
+.panel {
+  position: fixed;
+  right: 24px;
+  bottom: 88px;
+  z-index: 900;
+  display: flex;
+  flex-direction: column;
+  width: 380px;
+  height: 560px;
+  max-height: calc(100vh - 120px);
+  max-width: calc(100vw - 32px);
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+  box-shadow: 0 8px 32px rgb(0 0 0 / 24%);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  background: var(--ifm-color-emphasis-100);
+}
+
+.title {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.headerActions {
+  display: flex;
+  gap: 8px;
+}
+
+.textBtn {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--ifm-color-emphasis-700);
+}
+
+.textBtn:hover {
+  background: var(--ifm-color-emphasis-200);
+}
+
+.list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.empty {
+  color: var(--ifm-color-emphasis-600);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.userMsg,
+.botMsg {
+  padding: 9px 12px;
+  border-radius: 10px;
+  font-size: 13.5px;
+  line-height: 1.7;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.userMsg {
+  align-self: flex-end;
+  max-width: 85%;
+  color: #fff;
+  background: var(--ifm-color-primary);
+}
+
+.botMsg {
+  align-self: flex-start;
+  max-width: 95%;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.errorMsg {
+  align-self: stretch;
+  padding: 8px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: var(--ifm-color-danger-darkest, #a00);
+  background: var(--ifm-color-danger-contrast-background, #fde8e8);
+}
+
+.plainText {
+  white-space: pre-wrap;
+}
+
+.codeBlock {
+  margin: 8px 0;
+  padding: 10px;
+  border-radius: 6px;
+  overflow-x: auto;
+  font-size: 12.5px;
+  line-height: 1.6;
+  background: var(--ifm-color-emphasis-200);
+}
+
+.composer {
+  display: flex;
+  gap: 8px;
+  padding: 10px;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.input {
+  flex: 1;
+  resize: none;
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 8px 10px;
+  border-radius: 8px;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  background: var(--ifm-background-color);
+  color: var(--ifm-font-color-base);
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--ifm-color-primary);
+}
+
+.sendBtn {
+  align-self: flex-end;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-size: 13.5px;
+  color: #fff;
+  background: var(--ifm-color-primary);
+}
+
+.sendBtn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* 窄屏：面板占满宽度 */
+@media (max-width: 480px) {
+  .panel {
+    right: 8px;
+    left: 8px;
+    width: auto;
+    bottom: 80px;
+  }
+
+  .launcher {
+    right: 16px;
+    bottom: 16px;
+  }
+}
