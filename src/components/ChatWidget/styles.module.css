@@ -37,7 +37,8 @@
   overflow: hidden;
   border-radius: 12px;
   border: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-color);
+  /* 用 surface 而非 background：浅色模式下 --ifm-background-color 的值是 transparent */
+  background: var(--ifm-background-surface-color);
   box-shadow: 0 8px 32px rgb(0 0 0 / 24%);
 }
 
@@ -151,7 +152,7 @@
   padding: 8px 10px;
   border-radius: 8px;
   border: 1px solid var(--ifm-color-emphasis-300);
-  background: var(--ifm-background-color);
+  background: var(--ifm-background-surface-color);
   color: var(--ifm-font-color-base);
 }
 
