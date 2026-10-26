@@ -17,6 +17,56 @@ sidebar_position: 1
 
 读完你会得到：一个能自己调用工具、看结果、再决定下一步的最小 Agent，以及一份可以继续往上加东西的骨架。
 
+## 预备知识
+
+这篇的代码不复杂，但有几处容易卡住。先把它们讲清楚，后面看到就不会停。
+
+**① `def` 是「定义」，不是「执行」**
+
+```python
+def chat(messages, tools=None):      # 只是登记「有这么个动作」
+    ...
+
+chat(msgs, TOOLS)                    # 这行才真的执行它
+```
+
+光写 `def` 不会有任何输出——就像写菜谱不会自动出锅。文中每段 `def` 下面都有**顶格**的调用代码，那些才是真正在跑的。
+
+**② `json.load` 和 `json.loads` 是两个函数**
+
+| 函数 | 吃什么 | 例子 |
+|---|---|---|
+| `json.loads(s)` | **字符串** | `json.loads('{"a":1}')` |
+| `json.load(f)` | **有 `read()` 的对象**（文件、HTTP 响应） | `json.load(r)` |
+
+记法：**带 `s` 的吃 string，不带的吃 file**。传错会直接报错：
+
+```text
+json.loads(文件对象) → TypeError: the JSON object must be str, bytes or bytearray
+json.load(字符串)    → AttributeError: 'str' object has no attribute 'read'
+```
+
+**③ 字典可以事后加键**
+
+```python
+body = {"model": MODEL, "messages": messages, "stream": False}   # 3 个键
+if tools:
+    body["tools"] = tools                                        # 变成 4 个键
+```
+
+`body["tools"] = tools` 不是「修改」，是**新增一个键**。Python 字典是可变的，建好后还能往里加。
+
+**④ `with` 用来自动收尾**
+
+```python
+with urllib.request.urlopen(req, timeout=60) as r:
+    return json.load(r)
+```
+
+出了这个块，连接**自动关闭**——不用手动 `r.close()`。不放 `with` 容易忘，连接越积越多。
+
+准备好了，往下走。
+
 ## 一、先明确：一个循环最少需要什么
 
 一个能跑的最小 Agent，必需四件：
