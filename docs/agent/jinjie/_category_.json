@@ -1,0 +1,10 @@
+{
+  "label": "进阶篇",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "title": "进阶篇",
+    "slug": "/agent/jinjie",
+    "description": "从「看懂」到「跑通」。每一篇都是：一个真实任务 → 最小可跑代码 → 运行结果 → 常见坑。建议按顺序动手，每篇跑通再进下一篇。"
+  }
+}

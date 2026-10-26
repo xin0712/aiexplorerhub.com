@@ -1,0 +1,10 @@
+{
+  "label": "高级篇",
+  "position": 3,
+  "link": {
+    "type": "generated-index",
+    "title": "高级篇",
+    "slug": "/agent/gaoji",
+    "description": "从「跑通」到「生产可用」。每篇一个硬问题：可靠性、安全、成本、评估、集成、选型。跑通一个 Agent 不难，让它稳定、安全、省钱地跑在真实业务里才难。"
+  }
+}
