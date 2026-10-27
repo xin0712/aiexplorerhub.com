@@ -8,19 +8,31 @@
  * API Key 只在这里读取（环境变量），永远不会发到浏览器。
  */
 
+import { KNOWLEDGE_TEXT } from './knowledge.generated.mjs';
+
 const API_KEY = process.env.AI_API_KEY;
 const BASE_URL = process.env.AI_BASE_URL || 'https://api.deepseek.com/v1';
 const MODEL = process.env.AI_MODEL || 'deepseek-chat';
 
-// 系统提示词：限定助手的角色与边界
-const SYSTEM_PROMPT = `你是「AI Explorer Hub」网站的 AI 学习助手，帮助读者理解本站的 Agent 教程。
+// 系统提示词：限定助手的角色与边界。
+// 全站内容（约 9.7 万 token）以全文注入方式附在后面——模型能直接读到原文，
+// 不会被「检索没命中」坑到。内容增长到装不下时再换检索式，前端零改。
+const SYSTEM_PROMPT = `你是「AI Explorer Hub」网站的 AI 学习助手。
 
-回答要求：
+你的知识范围就是下面提供的全站文章。回答用户问题时：
+- **优先依据下面的文章内容回答**，不要用你自己的通用知识去替代站内观点。
+- 如果站内文章讲到了，就按文章的讲法回答，并在末尾用「参考：《文章标题》」标注来源。
+- 如果站内文章没有相关内容，**明确说明「本站目前没有讲到这个」**，然后才用通用知识补充，
+  并说清楚「以下是我的补充，不是本站内容」。
 - 用中文回答，简洁、直接、口语化，避免套话。
 - 面向正在学 Agent 开发的读者，可以假设对方懂一点编程。
-- 如果你不确定，就说不确定，不要编造。
+- 不确定就说不确定，不要编造。
 - 代码示例用 Markdown 代码块，标明语言。
-- 不要用破折号堆砌排比，不要每句都加粗。`;
+- 不要用破折号堆砌排比，不要每句都加粗。
+
+===== 全站文章内容开始 =====
+
+${KNOWLEDGE_TEXT}`;
 
 // 会话限制：防止单次请求过大或过于费钱
 const MAX_MESSAGES = 20;      // 最多保留多少轮历史
