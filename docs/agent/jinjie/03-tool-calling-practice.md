@@ -337,23 +337,23 @@ Agent -> MCP Client -> MCP Server -> 工具/数据源
 
 ## 六、动手：写一个最小 MCP Server
 
-### 先认清协议：三个方法 + 一次通知
+### 先认清协议：三个请求 + 一次通知
 
-MCP 听起来很大，但「暴露工具」这条链路只需要三个方法，加上一次通知：
+MCP 听起来很大，但「暴露工具」这条链路只有四条消息——**三个请求会得到应答，一次通知不会**：
 
-| 方法 | 谁发 | 干什么 |
-|---|---|---|
-| `initialize` | 客户端 | 握手：报协议版本、交换能力 |
-| `notifications/initialized` | 客户端 | 通知服务端「我准备好了」 |
-| `tools/list` | 客户端 | 问你有哪些工具 |
-| `tools/call` | 客户端 | 调用某个工具 |
+| 消息 | 谁发 | 干什么 | 要不要应答 |
+|---|---|---|---|
+| `initialize` | 客户端 | 握手：报协议版本、交换能力 | 要 |
+| `notifications/initialized` | 客户端 | 通知服务端「我准备好了」 | **不要** |
+| `tools/list` | 客户端 | 问你有哪些工具 | 要 |
+| `tools/call` | 客户端 | 调用某个工具 | 要 |
 
 传输用 **stdio**：换行分隔的 JSON-RPC 2.0，**一行一条消息**。
 
 两条硬规矩，违反任何一条客户端都会挂：
 
 1. **stdout 只能出现协议消息**。日志、`print` 调试、警告——一律走 stderr。stdout 混进一行非协议文本，客户端就在那里解析失败。
-2. **通知（没有 `id`）不应答**。给通知回包同样是协议错误。
+2. **通知（没有 `id`）不应答**——就是表里那行「不要」。给它回包同样是协议错误。
 
 ### 服务端
 
@@ -361,7 +361,7 @@ MCP 听起来很大，但「暴露工具」这条链路只需要三个方法，�
 
 ```python
 import json, sys
-from ad_tool import TOOL_IMPL, TOOLS
+from ad_tool import TOOL_IMPL, TOOLS, build_db
 
 PROTOCOL_VERSION = "2025-06-18"
 SERVER_INFO = {"name": "ad-report-server", "title": "广告投放报表 MCP Server", "version": "0.1.0"}
@@ -434,6 +434,10 @@ def main():
         except json.JSONDecodeError as e:
             fail(None, -32700, f"JSON 解析失败：{e}")
     log("[server] 客户端关闭了输入，退出")
+
+
+if __name__ == "__main__":
+    main()
 ```
 
 有两处设计值得单独说，因为它们正是第三章那三条规则在协议层的对应物：
@@ -493,49 +497,159 @@ server 退出码: 0
 
 ### 让 Agent 从 MCP 拿工具
 
-这才是这一篇的重点。下面这段代码里，**Agent 完全不认识 `query_ad_report`**——工具是运行时问出来的：
+这才是这一篇的重点。下面这段是**完整的、存成 .py 就能跑的**代码——它自带两样东西：和 01 篇一样的 `chat()`，以及一个最小的 MCP 客户端。
+
+重点看最后那段 Agent：它**完全不认识 `query_ad_report`**，工具是运行时问出来的。
 
 ```python
-mcp = McpClient()                       # 起子进程 + 握手
+import json, os, subprocess, urllib.request
 
-# 关键：工具不是写死的，是问出来的
-mcp_tools = mcp.list_tools()
+API_KEY = os.environ["OPENAI_API_KEY"]
+BASE_URL = os.environ.get("OPENAI_BASE_URL", "https://api.deepseek.com/v1")
+MODEL = os.environ.get("MODEL", "deepseek-chat")
+
+
+def chat(messages, tools=None):
+    """与 01 篇完全一样：发一次请求，拿回一个字典。"""
+    body = {"model": MODEL, "messages": messages, "stream": False}
+    if tools:
+        body["tools"] = tools
+    req = urllib.request.Request(
+        f"{BASE_URL}/chat/completions",
+        data=json.dumps(body).encode(),
+        headers={"Authorization": f"Bearer {API_KEY}", "Content-Type": "application/json"},
+    )
+    with urllib.request.urlopen(req, timeout=120) as r:
+        return json.load(r)
+
+
+class McpClient:
+    """最小 MCP 客户端：起一个子进程，按 id 一问一答。"""
+
+    def __init__(self, command=("python3", "mcp_server.py")):
+        self.p = subprocess.Popen(
+            list(command),
+            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+            text=True, bufsize=1,                  # 行缓冲：一行一条消息
+        )
+        self._id = 0
+        self.call("initialize", {
+            "protocolVersion": "2025-06-18",
+            "capabilities": {},
+            "clientInfo": {"name": "agent", "version": "0.1.0"},
+        })
+        self.notify("notifications/initialized")    # 握手第二步：通知，不等应答
+
+    def call(self, method, params=None):
+        """发一条请求，等一条应答。"""
+        self._id += 1
+        req = {"jsonrpc": "2.0", "id": self._id, "method": method}
+        if params is not None:
+            req["params"] = params
+        self.p.stdin.write(json.dumps(req) + "\n")
+        self.p.stdin.flush()
+        return json.loads(self.p.stdout.readline())
+
+    def notify(self, method, params=None):
+        """发一条通知——没有 id，所以不等应答。"""
+        msg = {"jsonrpc": "2.0", "method": method}
+        if params is not None:
+            msg["params"] = params
+        self.p.stdin.write(json.dumps(msg) + "\n")
+        self.p.stdin.flush()
+
+    def list_tools(self):
+        return self.call("tools/list")["result"]["tools"]
+
+    def call_tool(self, name, arguments):
+        result = self.call("tools/call", {"name": name, "arguments": arguments})["result"]
+        text = result["content"][0]["text"]
+        if result.get("isError"):        # 工具失败：抛出去，由 Agent 决定怎么回传
+            raise RuntimeError(text)
+        return json.loads(text)
+
+    def close(self):
+        self.p.stdin.close()              # 关掉 stdin 就是告诉服务端「结束」
+        self.p.wait(timeout=10)
+
+
+# ---------------- Agent：工具是运行时问出来的 ----------------
+
+mcp = McpClient()
+
 TOOLS = [{"type": "function", "function": {
-    "name": t["name"], "description": t["description"], "parameters": t["inputSchema"],
-}} for t in mcp_tools]
+    "name": t["name"],
+    "description": t["description"],
+    "parameters": t["inputSchema"],      # 注意字段改名：MCP 叫 inputSchema
+}} for t in mcp.list_tools()]
 
-# 下面就是 01 篇那个循环，一个字没改
+print("运行时从 MCP 拿到的工具：", [t["function"]["name"] for t in TOOLS])
+
+
+def run_agent(question, max_steps=8):
+    msgs = [{"role": "user", "content": question}]
+
+    for step in range(1, max_steps + 1):
+        msg = chat(msgs, TOOLS)["choices"][0]["message"]
+        msgs.append(msg)
+
+        tool_calls = msg.get("tool_calls") or []
+        if not tool_calls:                           # 退出条件①：模型不再要工具
+            return msg.get("content") or ""
+
+        for tc in tool_calls:
+            name = tc["function"]["name"]
+            args = json.loads(tc["function"]["arguments"])
+            try:
+                out = json.dumps(mcp.call_tool(name, args), ensure_ascii=False)
+            except Exception as e:
+                out = json.dumps({"error": str(e)}, ensure_ascii=False)
+            print(f"  步骤{step}: 经 MCP 调用 {name}({json.dumps(args, ensure_ascii=False)})")
+            msgs.append({"role": "tool", "tool_call_id": tc["id"], "content": out})
+
+    return f"[已达步数上限 {max_steps}，任务未完成]"      # 退出条件②：兜底
+
+
+print(run_agent("847 最近三天投放怎么样？"))
+mcp.close()
 ```
+
+三处要留意：
+
+1. **`McpClient` 只是「换了个写法的 HTTP 客户端」**——`call()` 发一条、读一行，`notify()` 发一条、不读。整个类和业务完全无关，换任何 MCP Server 都适用。
+2. **`raise RuntimeError(text)`**——工具失败时在客户端就抛出去，交给 Agent 循环里那个 `except` 转成 `{"error": ...}` 回传给模型。这是第三章「失败要显式」在客户端的延续。
+3. **`mcp.close()`**——关掉子进程的 stdin，服务端那个 `for line in sys.stdin` 循环自然结束。不关的话子进程会一直挂着。
 
 跑起来：
 
 ```text
 运行时从 MCP 拿到的工具： ['query_ad_report']
   步骤1: 经 MCP 调用 query_ad_report({"adv_id": 847, "days": 3})
+## 广告主 847 最近三天投放概览（2026-10-25 ~ 10-27）
 
-== 回答 ==
-## 广告主 847 · 最近 3 天投放概览
+**整体：花 6200 美元，收入 5864 美元，ROI 0.95，转化 121 次** —— 整体是微亏状态（每花 1 美元回 0.95 美元）。
+
+### 按天看：趋势在恶化
 
 | 日期 | 消耗 | 收入 | ROI | 转化 |
 |---|---|---|---|---|
-| 10-25 | 2,000 | 2,024 | 1.01 | 44 |
-| 10-26 | 2,100 | 1,980 | 0.94 | 41 |
-| 10-27 | 2,100 | 1,860 | 0.89 | 36 |
-| **合计** | **6,200** | **5,864** | **0.95** | **121** |
+| 10-25 | 2000 | 2024 | 1.01 | 44 |
+| 10-26 | 2100 | 1980 | 0.94 | 41 |
+| 10-27 | 2100 | 1860 | 0.89 | 36 |
 
-整体处于亏损状态（ROI 0.95，三天累计亏 336），且趋势在恶化：ROI 由 1.01 连续下滑到 0.89。
+消耗在往上加，收入和转化却在往下掉，三天 ROI 从 1.01 一路跌到 0.89。
 
-| 渠道 | 消耗 | 收入 | ROI | 转化 |
-|---|---|---|---|---|
-| Facebook | 3,950 | 3,164 | **0.80** | 64 |
-| Google | 2,250 | 2,700 | **1.20** | 57 |
+### 按渠道看：Facebook 拖后腿，Google 表现好
 
-关键结论
-- 问题出在 Facebook：三天 ROI 逐日走低（0.92 → 0.80 → 0.70），但预算反而在加码（1,200 → 1,350 → 1,400）。
-- Google 是唯一健康的渠道：ROI 稳定在 1.15~1.26 且略有上升，同时预算还在收缩（800 → 700）。
+| 渠道 | 消耗 | 收入 | ROI |
+|---|---|---|---|
+| Facebook | 3950 | 3164 | **0.80** |
+| Google | 2250 | 2700 | **1.20** |
 
-（下略：其后是三条投放建议，与本章要点无关）
+随后是三条投放建议（砍 Facebook 预算、向 Google 倾斜、设止损线），与本段要点无关，这里略去。
 ```
+
+（上面是一次真实运行的原样输出。模型每次回答的措辞都不一样——你跑出来的会是另一种说法，但只要 `步骤1` 那行和数字对得上，就说明链路是通的。）
 
 对照第七章前半段——同样的工具、同样的循环、同样的回答。差别只有一个：**工具不再写死在你的代码里**。
 
