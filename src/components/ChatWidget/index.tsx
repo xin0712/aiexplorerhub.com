@@ -7,6 +7,7 @@
 
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import styles from './styles.module.css';
+import {useDragPanel} from './useDragPanel';
 
 type Role = 'user' | 'assistant';
 
@@ -62,6 +63,10 @@ export default function ChatWidget() {
   const [error, setError] = useState('');
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+
+  // 拖动：按住标题栏移动面板，位置记在本地
+  const drag = useDragPanel(panelRef);
 
   // 首次挂载时读回历史（仅浏览器）
   useEffect(() => {
@@ -151,8 +156,20 @@ export default function ChatWidget() {
   return (
     <>
       {open && (
-        <div className={styles.panel} role="dialog" aria-label="AI 学习助手">
-          <div className={styles.header}>
+        <div
+          className={styles.panel}
+          role="dialog"
+          aria-label="AI 学习助手"
+          ref={panelRef}
+          style={drag.style}>
+          <div
+            className={styles.header}
+            onPointerDown={drag.onPointerDown}
+            onPointerMove={drag.onPointerMove}
+            onPointerUp={drag.onPointerUp}
+            onPointerCancel={drag.onPointerUp}
+            onDoubleClick={drag.reset}
+            title="按住可拖动，双击复位">
             <span className={styles.title}>AI 学习助手</span>
             <div className={styles.headerActions}>
               {messages.length > 0 && (

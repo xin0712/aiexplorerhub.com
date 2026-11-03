@@ -49,6 +49,20 @@
   padding: 12px 14px;
   border-bottom: 1px solid var(--ifm-color-emphasis-200);
   background: var(--ifm-color-emphasis-100);
+  /* 拖动把手：提示可以按住拖，同时避免拖动时选中标题文字 */
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  border-radius: 12px 12px 0 0;
+}
+
+.header:active {
+  cursor: grabbing;
+}
+
+/* 标题栏里的按钮恢复普通光标——那里是点击而不是拖动 */
+.header button {
+  cursor: pointer;
 }
 
 .title {
@@ -177,13 +191,18 @@
   cursor: not-allowed;
 }
 
-/* 窄屏：面板占满宽度 */
+/* 窄屏：面板占满宽度（拖动坐标由 JS 在窄屏下自动停用，不会和内联样式打架）*/
 @media (max-width: 480px) {
   .panel {
     right: 8px;
     left: 8px;
     width: auto;
     bottom: 80px;
+    top: auto;
+  }
+
+  .header {
+    cursor: default;
   }
 
   .launcher {
