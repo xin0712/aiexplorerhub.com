@@ -414,14 +414,17 @@ Multi-Agent 不是只关心步骤顺序，而是关心谁负责什么判断。
 Planner = 制定计划  
 Controller = 控制流程  
 Runtime = 执行动作  
-Harness = 承载整个系统运行
+
+而这几个东西合起来，连同工具、记忆、评测、权限等等，有一个总称：**Harness**——模型之外的一切。
 
 放到 Multi-Agent 里，可以这样理解：
 
 Planner：决定任务如何拆给不同 Agent  
 Controller：调度不同 Agent 的执行顺序  
 Runtime：为每个 Agent 提供工具和执行环境  
-Harness：把整个多 Agent 系统托管起来
+Harness：把上面这些（以及整个多 Agent 系统）统统装进去的那个总称
+
+> **注意层级**：Harness 不是和 Runtime 并列的第四样东西，而是**包含**它。详见 [Agent Harness](./agent-harness)。
 
 例如：
 
@@ -510,9 +513,9 @@ Multi-Agent 系统里，每个 Agent 都可能产生中间结果。
 哪些结果需要传递给下一个 Agent？  
 哪些结果应该丢弃？
 
-这就是为什么 Harness 和 Controller 很重要。
+这些问题的答案不在 Agent 自身，而在跑它们的那套系统里—— Controller 负责调度，Runtime 负责状态与重试，评测体系负责判断可信度。它们合起来就是 [Agent Harness](./agent-harness)。
 
-它们负责让多 Agent 系统有序运行，而不是一群 Agent 混乱对话。
+正是这套东西让多 Agent 系统有序运行，而不是一群 Agent 混乱对话。
 
 ## 十、什么时候应该使用 Multi-Agent？
 

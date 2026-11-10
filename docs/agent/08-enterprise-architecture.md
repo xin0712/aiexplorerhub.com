@@ -15,6 +15,8 @@ sidebar_position: 10
 
 前面我们讲了单 Agent、Runtime、Planner、Controller、Harness，以及 Multi-Agent 多智能体系统。
 
+这里要强调一点：**Harness 是后面这些概念的总称**，不是它们的同类项——Runtime、Planner、Controller 全都装在 Harness 里（见 [Agent Harness](./agent-harness)）。
+
 这些概念偏向“Agent 如何运行”。
 
 但如果我们真的要把 Agent 用到企业里，就不能只关心它能不能回答问题，而要关心：

@@ -35,6 +35,7 @@ const sidebars: SidebarsConfig = {
         {type: 'doc', id: 'agent/tool-calling-mcp'},
         {type: 'doc', id: 'agent/agent-runtime'},
         {type: 'doc', id: 'agent/multi-agent'},
+        {type: 'doc', id: 'agent/agent-harness'},
         {type: 'doc', id: 'agent/enterprise-architecture'},
         {type: 'doc', id: 'agent/build-from-zero'},
         {type: 'doc', id: 'agent/agent-future'},
